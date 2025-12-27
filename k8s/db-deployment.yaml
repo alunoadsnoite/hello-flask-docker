@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: python:3.12-slim
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: db-config
+            - secretRef:
+                name: db-secret
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              pip install flask psycopg[binary] &&
+              cat <<EOF > app.py
+              from flask import Flask
+              import psycopg
+              import os
+
+              app = Flask(__name__)
+
+              @app.route("/")
+              def index():
+                  conn = psycopg.connect(
+                      host=os.environ["DB_HOST"],
+                      dbname=os.environ["DB_NAME"],
+                      user=os.environ["DB_USER"],
+                      password=os.environ["DB_PASSWORD"]
+                  )
+                  conn.close()
+                  return "ConfigMap + Secret funcionando!"
+
+              app.run(host="0.0.0.0", port=8080)
+              EOF
+              python app.py
