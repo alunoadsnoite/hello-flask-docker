@@ -1,13 +1,13 @@
-# Hello Flask Docker
+# Flask + Postgres com Docker e Kubernetes
 
-API simples em Flask com:
+Projeto de estudo com:
+- Flask
+- PostgreSQL
 - Docker
 - Docker Compose
-- Postgres
-- Healthcheck
-- Variáveis de ambiente
-- Volume persistente
+- Kubernetes (kind)
 
-## Subir o projeto
-```bash
-docker compose up --build
+## Como rodar
+- Docker: `docker compose up`
+- Kubernetes: `kubectl apply -f k8s/`
+
