@@ -11,3 +11,4 @@ Projeto de estudo com:
 - Docker: `docker compose up`
 - Kubernetes: `kubectl apply -f k8s/`
 
+# flask-postgres-k8s
